@@ -48,6 +48,8 @@ For finetuning **YOLOv8**, run `task2_main.py`. Note that `PATIENCE` refers to t
 The training outcome will automatically stored in `runs/detect/visdrone_yolov8`, you can find the corresponding weights in the subdirectory `weights`.
 
 For the subsequent tracking, run `task2_track.py`. You should set `VIDEO_PATH`, `MODEL_PATH`, `OUTPUT_VIDEO` and `LINE_Y` correctly for function `run_tracking`, it will output a video with each frame annotated by bounding boxes, and create a horizontal line at `LINE_Y` to count the objects crossing the line as well.
+
+For analyzing certain frames with occlusion, set `OCCLUSION_START_FRAME` to the number of the frame you want to start with in the video. Function `extract_keyframe` will output the annotation results of **four** frames, starting from the one you have specified, to the directory `keyframes_occlusion`.
 ### Task 3
 You only need to run `task3_main.py` to train U-Net from scratch.
 
