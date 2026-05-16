@@ -138,13 +138,13 @@ def validate(model, loader, criterion, num_classes, device):
 
 
 def run_experiment(loss_name: str, criterion, train_loader, val_loader, test_loader,
-                   device, num_classes=3, epochs=30, lr=1e-3):
+                   device, num_classes=3, epochs=30, lr=1e-3, weight_decay=1e-4):
 
     wandb.init(project="cv-task3-pet-segmentation", name=f"{loss_name}_wd", reinit=True,
                config={"loss": loss_name, "lr": lr, "epochs": epochs})
 
     model = UNet(n_channels=3, n_classes=num_classes, bilinear=True).to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=1e-4)
+    optimizer = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
 
     best_miou = 0.0
@@ -195,6 +195,7 @@ if __name__ == "__main__":
     NUM_CLASSES = 3
     EPOCHS = 30
     LEARNING_RATE = 1e-3
+    WEIGHT_DECAY = 1e-4
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
     train_set = OxfordPetDataset(DATASET_ROOT, split="train", size=IMG_SIZE)
@@ -231,6 +232,7 @@ if __name__ == "__main__":
             num_classes=NUM_CLASSES,
             epochs=EPOCHS,
             lr=LEARNING_RATE,
+            weight_decay=WEIGHT_DECAY
         )
         histories[name] = history
         val_results[name] = best_val_miou
